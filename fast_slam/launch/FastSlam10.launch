@@ -1,8 +1,0 @@
-<launch>
-	<node pkg="fast_slam" name="CMD_Pub" type="CMD_Pub"/>
-	<node pkg="fast_slam" name="Vehicle" type="Vehicle"/>
-	<node pkg="fast_slam" name="Plot" type="Plot.py"/>
-	<node pkg="fast_slam" name="FastSlam10" type="FastSlam10"/>
-	
-
-</launch>
