@@ -7,6 +7,7 @@ from matplotlib.patches import Ellipse
 import numpy as np
 from numpy import linalg as LA
 from std_msgs.msg import Float64MultiArray
+from geometry_msgs.msg import Twist
 
 PI = 3.1415926
 s = 5.9915
@@ -16,6 +17,7 @@ plt_get = False
 temp = 0
 
 pose = np.array([2,0,PI/2])
+GT = pose
 LM_X = np.zeros(30)
 LM_Y = np.zeros(30)
 theta = 0
@@ -52,11 +54,18 @@ def callback(msg):
 		plt_[i] = msg.data[3+i]
 	global plt_get
 	plt_get = True
-	
+'''
+def GT_callback(msg):
+	global GT
+	GT[0] = msg.linear.x
+	GT[1] = msg.linear.y
+	GT[2] = msg.angular.z
+'''	
 
 if __name__ == '__main__':
 	rospy.init_node('Plot', anonymous=True)
 	rospy.Subscriber('status',Float64MultiArray,callback)
+	#rospy.Subscriber('GroundTruth',Twist,GT_callback)
 
 	rate = rospy.Rate(100) # 100hz
 	while not rospy.is_shutdown():
@@ -75,7 +84,7 @@ if __name__ == '__main__':
 		fig.canvas.flush_events()
 		'''
 		plt.clf()
-		plt.plot(LM_X,LM_Y,'b^',pose[0],pose[1],'ro',[pose[0],pose[0]+0.5*math.cos(pose[2])],[pose[1],pose[1]+0.5*math.sin(pose[2])],'r')
+		plt.plot(LM_X,LM_Y,'b^',pose[0],pose[1],'ro',[pose[0],pose[0]+0.5*math.cos(pose[2])],[pose[1],pose[1]+0.5*math.sin(pose[2])],'r')#,GT[0],GT[1],'co',[GT[0],GT[0]+0.1*math.cos(GT[2])],[GT[1],GT[1]+0.1*math.sin(GT[2])],'c')
 		
 		if plt_get == True:
 			for i in range(plt_.size/6):
